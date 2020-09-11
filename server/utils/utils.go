@@ -15,7 +15,7 @@ func NeedJson(r *http.Request) bool {
 }
 
 func ReadMySqlConfig(key string) string {
-	return ReadConfig(key, "config", "config/tsconfig.json", "json")
+	return ReadConfig(key, "config", "config", "json")
 }
 
 func ReadConfig(key, configName, configPath, configType string) string {

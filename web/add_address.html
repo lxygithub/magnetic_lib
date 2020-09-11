@@ -6,46 +6,49 @@
     <link rel="stylesheet" type="text/css" href="static/css/global_bg.css">
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<body>
 <embed type="text/html" src="page_head.html">
-<body style="height: auto;width: 100%">
-<form id="f_name" action="add_address.html" method="post">
-    <table style="height: max-content">
-        <tbody>
-        <tr>
-            <td>名称：</td>
-            <td>
-                <input type="text" name="name">
-            </td>
-        </tr>
-        <tr>
-            <td>url：</td>
-            <td>
-                <input type="url" name="url">
-            </td>
-        </tr>
-        <tr>
-            <td>描述：</td>
-            <td>
-                <input type="text" name="desc">
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div id="tip"></div>
-    <input type="submit" onclick="validate()" value="添加">
-</form>
+<div class="content">
+    <form id="f_name" action="add" method="post">
+        <table style="height: max-content">
+            <tbody>
+            <tr>
+                <td>名称：</td>
+                <td>
+                    <em style="color: red;margin-right: 5px">*</em><input type="text" name="name" required>
+                </td>
+            </tr>
+            <tr>
+                <td>url：</td>
+                <td>
+                    <em style="color: red;margin-right: 5px">*</em><input type="url" name="url"
+                                                                          pattern="^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$">
+                </td>
+            </tr>
+            <tr>
+                <td>描述：</td>
+                <td>
+                    <input type="text" name="desc">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="tip"></div>
+        <input type="submit" value="添加">
+    </form>
+</div>
 <embed type="text/html" src="page_foot.html">
 </body>
 <script>
-    function validate() {
-        if ($("input[name]").val() === "") {
-            $("#tip").innerHTML = "名称不能为空"
-            return
-        }
-        if ($("input[url]").val() === "") {
-            $("#tip").innerHTML = "url不能为空"
-            return
-        }
-    }
+
 </script>
+<style>
+    input:invalid {
+        box-shadow: 0 0 5px 1px red;
+    }
+
+    input:focus:invalid {
+        outline: none;
+    }
+</style>
 </html>

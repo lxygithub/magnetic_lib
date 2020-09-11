@@ -1,4 +1,4 @@
-package magnetic_lib
+package main
 
 import "github.com/server"
 
