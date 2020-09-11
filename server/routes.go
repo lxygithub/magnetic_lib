@@ -8,6 +8,7 @@ import (
 
 func Route() {
 	http.HandleFunc("/", pages.Home)
+	http.HandleFunc("/add", pages.AddAddress)
 
 	err := http.ListenAndServe(":9090", nil)
 	if err != nil {

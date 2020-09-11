@@ -1,14 +1,16 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/server/models"
 	"github.com/spf13/viper"
 	"net/http"
 	"os"
 	"strings"
 )
 
-func NeedJson(r http.Request) bool {
+func NeedJson(r *http.Request) bool {
 	return strings.Contains(r.Header.Get("content-type"), "json")
 }
 
@@ -28,4 +30,19 @@ func ReadConfig(key, configName, configPath, configType string) string {
 	return viper.GetString(key)
 }
 
-
+func Json(model interface{}) (string, error) {
+	bytes, err := json.Marshal(models.BaseResp{
+		Code:   0,
+		ErrMsg: "",
+		Data:   model,
+	})
+	return string(bytes), err
+}
+func ErrJson(code int, errMsg string) string {
+	errBytes, _ := json.Marshal(models.BaseResp{
+		Code:   code,
+		ErrMsg: errMsg,
+		Data:   nil,
+	})
+	return string(errBytes)
+}

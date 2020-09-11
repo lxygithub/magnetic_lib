@@ -26,19 +26,19 @@ func CreateTable() {
 	defer engine.Close()
 
 	/*
-	CREATE TABLE `cili_engine` (
-	    `id` INT(10) NOT NULL AUTO_INCREMENT,
-	    `url` VARCHAR(64) NULL DEFAULT NULL,
-	    `name` VARCHAR(64) NULL DEFAULT NULL,
-	    `desc` VARCHAR(64) NULL DEFAULT NULL,
-	    `enable` TINYINT(1)  NOT NULL DEFAULT 0,
-	    `created` DATE NULL DEFAULT NULL,
+		CREATE TABLE `cili_engine` (
+		    `id` INT(10) NOT NULL AUTO_INCREMENT,
+		    `url` VARCHAR(64) NULL DEFAULT NULL,
+		    `name` VARCHAR(64) NULL DEFAULT NULL,
+		    `desc` VARCHAR(64) NULL DEFAULT NULL,
+		    `enable` TINYINT(1)  NOT NULL DEFAULT 1,
+		    `created` DATE NULL DEFAULT NULL,
 
-	    PRIMARY KEY (`id`)
-			)
+		    PRIMARY KEY (`id`)
+				)
 
 
-	 */
+	*/
 	engine.Sync2(new(models.Address))
 
 	//engine.Prepare(_sql)
