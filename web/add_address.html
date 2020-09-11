@@ -31,8 +31,21 @@
         </tr>
         </tbody>
     </table>
-    <input type="submit" value="添加">
+    <div id="tip"></div>
+    <input type="submit" onclick="validate()" value="添加">
 </form>
 <embed type="text/html" src="page_foot.html">
 </body>
+<script>
+    function validate() {
+        if ($("input[name]").val() === "") {
+            $("#tip").innerHTML = "名称不能为空"
+            return
+        }
+        if ($("input[url]").val() === "") {
+            $("#tip").innerHTML = "url不能为空"
+            return
+        }
+    }
+</script>
 </html>
