@@ -8,31 +8,30 @@
 </head>
 <body>
 <div class="content">
-    <table style="height: max-content">
+    <table>
         <tbody>
         <tr>
             <td>名称：</td>
             <td>
-                <em style="color: red;margin-right: 5px">*</em><input type="text" id="name" required>
+                <em style="color: red;margin-right: 5px">*</em><input type="text" id="name">
             </td>
         </tr>
         <tr>
             <td>url：</td>
             <td>
-                <em style="color: red;margin-right: 5px">*</em><input type="url" id="url"
-                                                                      pattern="^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$">
+                <em style="color: red;margin-right: 5px">*</em><input type="url" id="url">
             </td>
         </tr>
         <tr>
             <td>描述：</td>
             <td>
-                <input type="text" id="desc">
+                <em style="color: red;margin-right: 5px;visibility: hidden">*</em><input type="text" id="desc">
             </td>
         </tr>
         </tbody>
     </table>
     <div id="tip"></div>
-    <input type="button" onclick="addAddress()" value="添加">
+    <input class="button" type="button" onclick="addAddress()" value="添加">
 </div>
 </body>
 <script>
@@ -40,6 +39,14 @@
         var name = $("#name").val()
         var url = $("#url").val()
         var desc = $("#desc").val()
+        if (name === "") {
+            alert("名字不能为空")
+            return
+        }
+        if (url === "") {
+            alert("url不能为空")
+            return
+        }
         $.ajax({
             url: "/add",
             data: {"name": name, "url": url, "desc": desc},
@@ -55,23 +62,34 @@
     }
 </script>
 <style>
-    .content{
+    html body {
         height: 100%;
-        width: 100%;
-        display: flex;
         display: -webkit-flex;
+        display: flex;
         flex-direction: column;
         justify-content: center;
     }
-    table{
 
+    .content {
+        height: auto;
+        width: auto;
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: row;
+        justify-content: center;
     }
+    table{
+        width: auto;
+    }
+
+    .button {
+        width: 100px;
+    }
+
     input:invalid {
         border-color: red;
     }
-    button{
-        width: 100px;
-    }
+
 
     input:focus:invalid {
         outline: none;

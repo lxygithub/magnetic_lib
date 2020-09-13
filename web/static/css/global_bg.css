@@ -1,12 +1,4 @@
 html {
-    background-repeat: no-repeat;
+    background-repeat: repeat-y;
     background-image: url("/web/static/image/background.jpg");
-}
-
-.content {
-    min-width: 100%;
-    min-height: 100%;
-}
-.push{
-    height: 50px;
 }
