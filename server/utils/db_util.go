@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"github.com/server/models"
 )
@@ -13,7 +14,8 @@ func GetXORMEngine() *xorm.Engine {
 	url := ReadMySqlConfig("mysql.url")
 	dbName := ReadMySqlConfig("mysql.name")
 
-	engine, err := xorm.NewEngine("mysql", fmt.Sprintf("%s:%s@%s/%s?charset=utf8", username, password, url, dbName))
+	datasource := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", username, password, url, dbName)
+	engine, err := xorm.NewEngine("mysql", datasource)
 
 	if err == nil {
 		return engine

@@ -3,52 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>添加</title>
-    <link rel="stylesheet" type="text/css" href="static/css/global_bg.css">
+    <link rel="stylesheet" type="text/css" href="/web/static/css/global_bg.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <body>
-<embed type="text/html" src="page_head.html">
 <div class="content">
-    <form id="f_name" action="add" method="post">
-        <table style="height: max-content">
-            <tbody>
-            <tr>
-                <td>名称：</td>
-                <td>
-                    <em style="color: red;margin-right: 5px">*</em><input type="text" name="name" required>
-                </td>
-            </tr>
-            <tr>
-                <td>url：</td>
-                <td>
-                    <em style="color: red;margin-right: 5px">*</em><input type="url" name="url"
-                                                                          pattern="^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$">
-                </td>
-            </tr>
-            <tr>
-                <td>描述：</td>
-                <td>
-                    <input type="text" name="desc">
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div id="tip"></div>
-        <input type="submit" value="添加">
-    </form>
+    <table style="height: max-content">
+        <tbody>
+        <tr>
+            <td>名称：</td>
+            <td>
+                <em style="color: red;margin-right: 5px">*</em><input type="text" id="name" required>
+            </td>
+        </tr>
+        <tr>
+            <td>url：</td>
+            <td>
+                <em style="color: red;margin-right: 5px">*</em><input type="url" id="url"
+                                                                      pattern="^(https?:\/\/(([a-zA-Z0-9]+-?)+[a-zA-Z0-9]+\.)+[a-zA-Z]+)(:\d+)?(\/.*)?(\?.*)?(#.*)?$">
+            </td>
+        </tr>
+        <tr>
+            <td>描述：</td>
+            <td>
+                <input type="text" id="desc">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div id="tip"></div>
+    <input type="button" onclick="addAddress()" value="添加">
 </div>
-<embed type="text/html" src="page_foot.html">
 </body>
 <script>
-
+    function addAddress() {
+        var name = $("#name").val()
+        var url = $("#url").val()
+        var desc = $("#desc").val()
+        $.ajax({
+            url: "/add",
+            data: {"name": name, "url": url, "desc": desc},
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                alert("添加成功")
+                $("#name").val("")
+                $("#url").val("")
+                $("#desc").val("")
+            }
+        })
+    }
 </script>
 <style>
+    .content{
+        height: 100%;
+        width: 100%;
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    table{
+
+    }
     input:invalid {
-        box-shadow: 0 0 5px 1px red;
+        border-color: red;
+    }
+    button{
+        width: 100px;
     }
 
     input:focus:invalid {
         outline: none;
+        border: none;
     }
 </style>
 </html>

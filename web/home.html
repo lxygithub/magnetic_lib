@@ -3,13 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>磁力库</title>
-    <link rel="stylesheet" type="text/css" href="static/css/global_bg.css">
+    <link rel="stylesheet" href="/web/static/css/global_bg.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/web/static/js/utils.js"></script>
+    <script>
+        function getAddressList() {
+            $.ajax({
+                url: "/",
+                type: "POST",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    renderPage(data)
+                }
+            })
+        }
+
+        $(document).ready(function () {
+            getAddressList();
+        });
+
+        function renderPage(data) {
+
+            var dataAddress = data.data
+            var addressList = dataAddress.data
+            var alist = "";
+            for (var i = 0; i < addressList.length; i++) {
+                var addr = addressList[i];
+                alist += stringFormat("<a id='addr_{0}' href='{1}' target='_blank'>{2}</a><br>", addr.id, addr.url, addr.name);
+            }
+            $(".content").append(alist);
+        }
+    </script>
 </head>
 <body>
-<embed type="text/html" src="page_head.html">
 <div class="content">
-    <a href="add">添加</a>
+    <a href="add">添加</a><br>
 </div>
-<embed type="text/html" src="page_foot.html">
 </body>
 </html>

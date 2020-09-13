@@ -6,6 +6,7 @@ import (
 	"github.com/server/utils"
 	"html/template"
 	"net/http"
+	"time"
 )
 
 func AddAddress(w http.ResponseWriter, r *http.Request) {
@@ -15,20 +16,20 @@ func AddAddress(w http.ResponseWriter, r *http.Request) {
 		t, _ := template.ParseFiles("web/add_address.html")
 		t.Execute(w, "")
 	} else if r.Method == "POST" {
-		name := r.Form.Get("name")
-		url := r.Form.Get("url")
-		desc := r.Form.Get("desc")
+		name := r.PostForm.Get("name")
+		url := r.PostForm.Get("url")
+		desc := r.PostForm.Get("desc")
 		address := models.Address{
-			Url:  url,
-			Name: name,
-			Desc: desc,
+			Url:     url,
+			Name:    name,
+			Desc:    desc,
+			Enable:  true,
+			Created: time.Now().Unix(),
 		}
 		if addAddress(address) == nil {
 			json, e := utils.Json(address)
 			if e == nil {
-				if utils.NeedJson(r) {
-					fmt.Fprintf(w, json)
-				}
+				fmt.Fprintf(w, json)
 			} else {
 				fmt.Fprintf(w, utils.ErrJson(500, "错误"))
 			}
@@ -38,7 +39,6 @@ func AddAddress(w http.ResponseWriter, r *http.Request) {
 
 func addAddress(address models.Address) error {
 	engine := utils.GetXORMEngine()
-
 	defer engine.Close()
 
 	_, err := engine.InsertOne(address)
