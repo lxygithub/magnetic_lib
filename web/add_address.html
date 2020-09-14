@@ -8,6 +8,9 @@
 </head>
 <body>
 <div class="content">
+    <div class="head">
+        <a href="add">添加</a>
+    </div>
     <table>
         <tbody>
         <tr>
@@ -32,6 +35,9 @@
     </table>
     <div id="tip"></div>
     <input class="button" type="button" onclick="addAddress()" value="添加">
+</div>
+<div class="foot">
+    <div>关于</div>
 </div>
 </body>
 <script>
@@ -63,20 +69,15 @@
 </script>
 <style>
     html body {
-        height: 100%;
-        display: -webkit-flex;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        height: 1920px;
+        display: grid;
+        align-items: start;
     }
 
     .content {
-        height: auto;
         width: auto;
-        display: flex;
-        display: -webkit-flex;
-        flex-direction: row;
-        justify-content: center;
+        display: grid;
+        place-items: center;
     }
     table{
         width: auto;

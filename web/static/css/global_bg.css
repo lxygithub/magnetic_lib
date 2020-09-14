@@ -1,4 +1,5 @@
 html {
-    background-repeat: repeat-y;
+    background-repeat: no-repeat;
     background-image: url("/web/static/image/background.jpg");
+    background-attachment: fixed;
 }
