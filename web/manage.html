@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>磁力库</title>
+    <link rel="stylesheet" href="/web/static/css/global_bg.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/web/static/js/utils.js"></script>
+    <script>
+        function getAddressList() {
+            $.ajax({
+                url: "/",
+                type: "POST",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    renderPage(data)
+                }
+            })
+        }
+
+        $(document).ready(function () {
+            getAddressList();
+        });
+
+        function renderPage(data) {
+
+            var dataAddress = data.data
+            var addressList = dataAddress.data
+            var alist = "";
+            for (var i = 0; i < addressList.length; i++) {
+                var addr = addressList[i];
+                alist += stringFormat("<div class='address'><a id='addr_{0}' href='{1}' target='_blank'>{2}</a></div>", addr.id, addr.url, addr.name);
+            }
+            $(".list").append(alist);
+        }
+
+        function delAddress(ids) {
+            $.ajax({
+                url: "/delete",
+                data: {"ids": ids},
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    alert(data.msg);
+                    getAddressList();
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<div class="head">
+    <a href="add">添加</a>
+</div>
+<div class="content">
+    <div class="list">
+
+    </div>
+</div>
+<div class="foot">
+    <div>关于</div>
+</div>
+</body>
+<style>
+
+    body {
+        height: 1920px;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+    }
+
+    .head {
+        width: 100%;
+        height: 50px;
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin-right: 10%;
+    }
+
+    .foot {
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        height: 50px;
+    }
+
+    .content {
+        display: grid;
+        width: 100%;
+        justify-items: center;
+
+
+    }
+
+    .list {
+        width: auto;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-auto-rows: 100px;
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+        align-items: start;
+
+    }
+
+    .address {
+        height: 80px;
+        width: 160px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 2px solid aquamarine;
+    }
+</style>
+</html>

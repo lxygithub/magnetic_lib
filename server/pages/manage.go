@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"github.com/server/models"
 	"github.com/server/utils"
+	"html/template"
 	"net/http"
 	"strings"
 )
 
 func Manage(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	if r.Method == "GET" {
 
-	}
+	t, _ := template.ParseFiles("/web/manage.html")
+	t.Execute(w, nil)
 
 }
 
@@ -26,10 +27,8 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 			ids = strings.ReplaceAll(ids, "]", ")")
 			engine := utils.GetXORMEngine()
 			defer engine.Close()
-			_, err := engine.Exec(
-
-				fmt.Sprintf("DELETE FROM cili_engine id IN %s;", ids),
-			)
+			sql := fmt.Sprintf("DELETE FROM cili_engine WHERE id IN %s;", ids)
+			_, err := engine.Exec(sql)
 			if err == nil {
 				resp, _ := utils.Json(models.BaseResp{
 					Msg: "删除成功",
