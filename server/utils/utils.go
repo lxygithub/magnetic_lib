@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/server/models"
@@ -45,4 +47,16 @@ func ErrJson(code int, errMsg string) string {
 		Data:   nil,
 	})
 	return string(errBytes)
+}
+
+func Md5Salt(str string) string {
+	salt := "cili@@lib"
+	h := md5.New()
+	h.Write([]byte(salt + str))
+	return hex.EncodeToString(h.Sum(nil))
+}
+func Md5(str string) string {
+	h := md5.New()
+	h.Write([]byte(str))
+	return hex.EncodeToString(h.Sum(nil))
 }
