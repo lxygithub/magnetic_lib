@@ -1,16 +1,23 @@
 package utils
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/md5"
+	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/server/models"
 	"github.com/spf13/viper"
+	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 )
+
+const AES_KEY = "PEIVOAJRTEAOGHOA"
 
 func NeedJson(r *http.Request) bool {
 	return strings.Contains(r.Header.Get("content-type"), "json")
@@ -33,11 +40,7 @@ func ReadConfig(key, configName, configPath, configType string) string {
 }
 
 func Json(model interface{}) (string, error) {
-	bytes, err := json.Marshal(models.BaseResp{
-		Code:   0,
-		ErrMsg: "",
-		Data:   model,
-	})
+	bytes, err := json.Marshal(model)
 	return string(bytes), err
 }
 func ErrJson(code int, errMsg string) string {
@@ -59,4 +62,40 @@ func Md5(str string) string {
 	h := md5.New()
 	h.Write([]byte(str))
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func ToInt64(str string) int64 {
+	i, _ := strconv.ParseInt(str, 10, 64)
+	return i
+}
+func ToInt(str string) int {
+	i, _ := strconv.Atoi(str)
+	return i
+}
+
+func AesEncryptCFB(origData []byte) string {
+	block, err := aes.NewCipher([]byte(AES_KEY))
+	if err != nil {
+		panic(err)
+	}
+	encrypted := make([]byte, aes.BlockSize+len(origData))
+	iv := encrypted[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		panic(err)
+	}
+	stream := cipher.NewCFBEncrypter(block, iv)
+	stream.XORKeyStream(encrypted[aes.BlockSize:], origData)
+	return hex.EncodeToString(encrypted)
+}
+func AesDecryptCFB(encrypted []byte) (decrypted []byte) {
+	block, _ := aes.NewCipher([]byte(AES_KEY))
+	if len(encrypted) < aes.BlockSize {
+		panic("ciphertext too short")
+	}
+	iv := encrypted[:aes.BlockSize]
+	encrypted = encrypted[aes.BlockSize:]
+
+	stream := cipher.NewCFBDecrypter(block, iv)
+	stream.XORKeyStream(encrypted, encrypted)
+	return encrypted
 }
