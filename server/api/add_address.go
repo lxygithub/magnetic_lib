@@ -27,17 +27,14 @@ func AddAddress(w http.ResponseWriter, r *http.Request) {
 			Created: time.Now().Unix(),
 		}
 		if addAddress(address) == nil {
-			json, e := utils.Json(models.BaseResp{
+			json := utils.JsonString(models.BaseResp{
 				Code:   0,
 				ErrMsg: "",
 				Msg:    "",
 				Data:   address,
 			})
-			if e == nil {
-				fmt.Fprintf(w, json)
-			} else {
-				fmt.Fprintf(w, utils.ErrJson(500, "错误"))
-			}
+			fmt.Fprintf(w, json)
+
 		}
 	}
 }

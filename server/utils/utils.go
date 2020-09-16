@@ -39,9 +39,9 @@ func ReadConfig(key, configName, configPath, configType string) string {
 	return viper.GetString(key)
 }
 
-func Json(model interface{}) (string, error) {
-	bytes, err := json.Marshal(model)
-	return string(bytes), err
+func JsonString(model interface{}) string {
+	bytes, _ := json.Marshal(model)
+	return string(bytes)
 }
 func ErrJson(code int, errMsg string) string {
 	errBytes, _ := json.Marshal(models.BaseResp{
@@ -73,7 +73,7 @@ func ToInt(str string) int {
 	return i
 }
 
-func AesEncryptCFB(origData []byte) string {
+func AesEncryptCFB(origData []byte) []byte {
 	block, err := aes.NewCipher([]byte(AES_KEY))
 	if err != nil {
 		panic(err)
@@ -85,7 +85,7 @@ func AesEncryptCFB(origData []byte) string {
 	}
 	stream := cipher.NewCFBEncrypter(block, iv)
 	stream.XORKeyStream(encrypted[aes.BlockSize:], origData)
-	return hex.EncodeToString(encrypted)
+	return encrypted
 }
 func AesDecryptCFB(encrypted []byte) (decrypted []byte) {
 	block, _ := aes.NewCipher([]byte(AES_KEY))
@@ -98,4 +98,13 @@ func AesDecryptCFB(encrypted []byte) (decrypted []byte) {
 	stream := cipher.NewCFBDecrypter(block, iv)
 	stream.XORKeyStream(encrypted, encrypted)
 	return encrypted
+}
+
+/**
+hex解码和aes解密
+*/
+func DecryptHexAesStr(hexAesTokenStr string) (tokenStr string) {
+	aesTokenStr, _ := hex.DecodeString(hexAesTokenStr)
+	tokenStr = string(AesDecryptCFB(aesTokenStr))
+	return
 }

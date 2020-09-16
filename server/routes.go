@@ -8,7 +8,7 @@ import (
 
 func Route() {
 	http.HandleFunc("/", api.Home)
-	http.HandleFunc("/manage/login", api.ManagerLogin)
+	http.HandleFunc("/manage/login", api.Login)
 	http.HandleFunc("/add", api.AddAddress)
 	http.HandleFunc("/delete", api.Delete)
 	http.HandleFunc("/web/static/", func(w http.ResponseWriter, r *http.Request) {

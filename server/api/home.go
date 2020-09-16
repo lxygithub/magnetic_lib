@@ -16,7 +16,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	} else {
 		addresses, err := GetHomeData()
 		if err == nil {
-			data, _ := utils.Json(models.BaseResp{
+			data := utils.JsonString(models.BaseResp{
 				Code:   0,
 				ErrMsg: "",
 				Data:   addresses,
