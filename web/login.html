@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/web/static/css/global_bg.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="content">
+    <div class="div_login">
+        <table class="t_login">
+            <tbody>
+            <tr>
+                <td>用户名：</td>
+                <td>
+                    <input id="username" type="text">
+                </td>
+            </tr>
+            <tr>
+                <td>密码：</td>
+                <td>
+                    <input id="password" type="password">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" value="登录" onclick="login($('#username').val(),$('#password').val());">
+                </td>
+
+                <td>
+                    没有账号？<input type="button" value="注册">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script>
+    function login(username, password) {
+        if (username === "" || password === "") {
+            alert("用户名或密码不能为空")
+            return
+        }
+        $.ajax({
+            url: "/login",
+            type: "POST",
+            data: {"usrename": username, "password": password},
+            dataType: "json",
+            success: function (data) {
+                if (data.code === 0) {
+                    sessionStorage.setItem("token", data.token)
+                    var referrerUrl = document.referrer;
+                    var localUrl = window.location.href.toString();
+                    var localHostname = window.location.hostname;
+                    var localPort = window.location.port;
+                    var localProtocol = window.location.protocol;
+                    var domain = localProtocol + "//" + localHostname + ":" + localPort;
+                    if (referrerUrl !== '' && referrerUrl.indexOf(domain) === 0) {
+                        //来自于本网站url
+                        location.href = referrerUrl;
+                    } else {
+                        //来自其他网站url
+                        location.href = "/";
+                    }
+
+                } else {
+                    alert(data.err_msg)
+                }
+            }
+        })
+    }
+</script>
+</html>

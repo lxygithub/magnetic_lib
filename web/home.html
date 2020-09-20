@@ -39,6 +39,7 @@
 <body>
 <div class="head">
     <a href="add">添加</a>
+    <a href="javascript:void(0);" onclick="manage()">管理</a>
 </div>
 <div class="content">
     <div class="list">
@@ -49,6 +50,25 @@
     <div>关于</div>
 </div>
 </body>
+<script>
+    function manage() {
+        var token = sessionStorage.getItem("token");
+        console.log(token)
+        if (!isEmpty(token)) {
+            $.ajax({
+                url: "/manage",
+                type: "POST",
+                data: {"token": token},
+                success: function (data) {
+
+                }
+            })
+        } else {
+            window.location.href = "/login.html"
+        }
+
+    }
+</script>
 <style>
 
     body {

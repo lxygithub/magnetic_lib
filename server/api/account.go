@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/server/models"
 	"github.com/server/utils"
+	"html/template"
 	"net/http"
 )
 
@@ -39,6 +40,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("content-type", "application/json; charset=UTF-8")
 			fmt.Fprintf(w, result)
 		}
+	} else {
+		t, _ := template.ParseFiles("web/login.html")
+		t.Execute(w, nil)
 	}
 
 }

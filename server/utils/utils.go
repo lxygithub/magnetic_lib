@@ -7,6 +7,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/server/models"
 	"github.com/spf13/viper"
@@ -87,24 +88,27 @@ func AesEncryptCFB(origData []byte) []byte {
 	stream.XORKeyStream(encrypted[aes.BlockSize:], origData)
 	return encrypted
 }
-func AesDecryptCFB(encrypted []byte) (decrypted []byte) {
+func AesDecryptCFB(encrypted []byte) (decrypted []byte, err error) {
 	block, _ := aes.NewCipher([]byte(AES_KEY))
 	if len(encrypted) < aes.BlockSize {
-		panic("ciphertext too short")
+		return nil, errors.New("ciphertext too short")
 	}
 	iv := encrypted[:aes.BlockSize]
 	encrypted = encrypted[aes.BlockSize:]
 
 	stream := cipher.NewCFBDecrypter(block, iv)
 	stream.XORKeyStream(encrypted, encrypted)
-	return encrypted
+	return encrypted, nil
 }
 
 /**
 hex解码和aes解密
 */
-func DecryptHexAesStr(hexAesTokenStr string) (tokenStr string) {
-	aesTokenStr, _ := hex.DecodeString(hexAesTokenStr)
-	tokenStr = string(AesDecryptCFB(aesTokenStr))
+func DecryptHexAesStr(hexAesTokenStr string) (tokenStr string, err error) {
+	aesTokenStr, err := hex.DecodeString(hexAesTokenStr)
+	bytes, err := AesDecryptCFB(aesTokenStr)
+	if err == nil {
+		tokenStr = string(bytes)
+	}
 	return
 }

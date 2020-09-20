@@ -26,28 +26,43 @@
 
         function renderPage(data) {
 
-            var dataAddress = data.data
-            var addressList = dataAddress.data
+            var addressList = data.data
             var alist = "";
             for (var i = 0; i < addressList.length; i++) {
                 var addr = addressList[i];
-                alist += stringFormat("<div class='address'><a id='addr_{0}' href='{1}' target='_blank'>{2}</a></div>", addr.id, addr.url, addr.name);
+                alist += stringFormat("<li class='address' style='background:{3}'>" +
+                    "<div class='div_item' id='addr_{0}'>" +
+                    "<div>{2}</div>" +
+                    "<div class='div-op'>" +
+                    "<input type='button' value='编辑' >" +
+                    "<input type='button' value='删除'  onclick='delAddress({4})'>" +
+                    "</div>" +
+                    "</div></li>",
+                    addr.id, addr.url, addr.name, i % 2 === 0 ? 'azure' : 'beige', addr.id);
             }
-            $(".list").append(alist);
+            $(".ul_list").append(alist);
         }
 
         function delAddress(ids) {
+            console.log(ids)
+            var token = sessionStorage.getItem("token")
+            console.log(token)
             $.ajax({
                 url: "/delete",
-                data: {"ids": ids},
+                data: {"ids": ids, "token": token},
                 type: "POST",
                 dataType: "json",
                 success: function (data) {
-                    alert(data.msg);
-                    getAddressList();
+                    if (data.code === 0) {
+                        alert(data.msg);
+                        getAddressList();
+                    } else {
+                        alert(data.err_msg)
+                    }
                 }
             })
         }
+
     </script>
 </head>
 <body>
@@ -56,7 +71,7 @@
 </div>
 <div class="content">
     <div class="list">
-
+        <ul class="ul_list"></ul>
     </div>
 </div>
 <div class="foot">
@@ -67,8 +82,6 @@
 
     body {
         height: 1920px;
-        display: grid;
-        grid-template-rows: auto 1fr auto;
     }
 
     .head {
@@ -99,23 +112,19 @@
 
     }
 
-    .list {
-        width: auto;
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        grid-auto-rows: 100px;
-        grid-row-gap: 5px;
-        grid-column-gap: 5px;
-        align-items: start;
-
-    }
 
     .address {
-        height: 80px;
-        width: 160px;
+        list-style-type: none;
+        height: auto;
+        width: 80vw;
         padding: 5px;
-        border-radius: 5px;
-        border: 2px solid aquamarine;
+    }
+
+    .div_item {
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
 </style>
 </html>
